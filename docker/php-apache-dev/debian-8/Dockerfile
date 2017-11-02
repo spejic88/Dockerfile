@@ -17,6 +17,7 @@ COPY conf/ /opt/docker/
 
 # Install development environment
 RUN /usr/local/bin/apt-install \
+	curl \
         gnupg \
     && wget -O - https://packagecloud.io/gpg.key | apt-key add - \
     && echo "deb https://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
@@ -34,3 +35,12 @@ RUN /usr/local/bin/apt-install \
     && docker-service-enable syslog ssh postfix \
     && /opt/docker/bin/bootstrap.sh \
     && docker-image-cleanup
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash
+
+RUN /usr/local/bin/apt-install \
+	nodejs \
+
+RUN npm install -g bower grunt-cli
